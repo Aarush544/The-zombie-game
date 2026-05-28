@@ -1,20 +1,18 @@
-using System.Numerics;
-using System.Threading.Tasks.Dataflow;
 using UnityEngine;
 
-public class NewMonoBehaviourScript : MonoBehaviour
+public class PlayerController : MonoBehaviour
 {
-    private ChaacterController _characterController;
-    public float MovementSpeed = 10f, RotationSpeed = 5f;
+    private CharacterController _characterController;
+    public float MovementSpeed = 10f;
+    public float RotationSpeed = 5f;
     private float _rotationY;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+
     void Start()
     {
         _characterController = GetComponent<CharacterController>();
     }
 
-    // Update is called once per frame
-    public void Move()
+    public void Move(Vector2 movementVector)
     {
         Vector3 move = transform.forward * movementVector.y + transform.right * movementVector.x;
         move = move * MovementSpeed * Time.deltaTime;
