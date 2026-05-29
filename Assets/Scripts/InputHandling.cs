@@ -1,13 +1,15 @@
-using System.Numerics;
-using System.Security.AccessControl;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class InputHandling : MonoBehaviour
 {
-    public PlayerController CharacterController;
-    private InputAction _moveAction, _lookAction;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    public PlayerController playerController;
+    private InputAction _moveAction;
+    private InputAction _lookAction;
+    private InputAction _jumpAction;
+    private InputAction _sprintAction;
+    private bool isSprinting;
+
     void Start()
     {
         _moveAction = InputSystem.actions.FindAction("Move");
@@ -15,7 +17,10 @@ public class InputHandling : MonoBehaviour
         _jumpAction = InputSystem.actions.FindAction("Jump");
         _sprintAction = InputSystem.actions.FindAction("Sprint");
 
-        _jumpAction.performed += OnJumpPerformed;
+        if (_jumpAction != null)
+        {
+            _jumpAction.performed += OnJumpPerformed;
+        }
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
@@ -37,13 +42,13 @@ public class InputHandling : MonoBehaviour
 
         isSprinting = _sprintAction != null && _sprintAction.IsPressed();
 
-        if (_moveAction != null)
+        if (_moveAction != null && playerController != null)
         {
             Vector2 movementVector = _moveAction.ReadValue<Vector2>();
             playerController.Move(movementVector, isSprinting);
         }
 
-        if (_lookAction != null)
+        if (_lookAction != null && playerController != null)
         {
             Vector2 lookVector = _lookAction.ReadValue<Vector2>();
             playerController.Rotate(lookVector);
@@ -56,5 +61,18 @@ public class InputHandling : MonoBehaviour
         {
             playerController.Jump(isSprinting);
         }
-    }   
+    }
+
+    private void OnDisable()
+    {
+        if (_jumpAction != null)
+        {
+            _jumpAction.performed -= OnJumpPerformed;
+        }
+
+        _moveAction?.Disable();
+        _lookAction?.Disable();
+        _jumpAction?.Disable();
+        _sprintAction?.Disable();
+    }
 }
