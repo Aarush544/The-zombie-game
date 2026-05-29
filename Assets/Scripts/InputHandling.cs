@@ -1,12 +1,13 @@
-using JetBrains.Annotations;
+using System.Numerics;
+using System.Security.AccessControl;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class InputHandling : MonoBehaviour
 {
-    public PlayerController playerController;
-    private InputAction _moveAction, _lookAction, _jumpAction, _sprintAction;
-    private bool isSprinting;
+    public PlayerController CharacterController;
+    private InputAction _moveAction, _lookAction;
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         _moveAction = InputSystem.actions.FindAction("Move");
