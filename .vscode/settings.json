@@ -67,6 +67,6 @@
         "*.sln": "*.csproj",
         "*.slnx": "*.csproj"
     },
-    "dotnet.defaultSolution": "The zombie game.slnx",
+    "dotnet.defaultSolution": "The-zombie-game.slnx",
     "dotnet.enableWorkspaceBasedDevelopment": false
 }
