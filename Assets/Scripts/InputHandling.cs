@@ -1,28 +1,59 @@
-using System.Numerics;
-using System.Security.AccessControl;
+using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class InputHandling : MonoBehaviour
 {
-    public PlayerController CharacterController;
-    private InputAction _moveAction, _lookAction;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    public PlayerController playerController;
+    private InputAction _moveAction, _lookAction, _jumpAction, _sprintAction;
+    private bool isSprinting;
     void Start()
     {
         _moveAction = InputSystem.actions.FindAction("Move");
         _lookAction = InputSystem.actions.FindAction("Look");
+        _jumpAction = InputSystem.actions.FindAction("Jump");
+        _sprintAction = InputSystem.actions.FindAction("Sprint");
+
+        _jumpAction.performed += OnJumpPerformed;
+
+        Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
 
-
-    // Update is called once per frame
     void Update()
     {
-        Vector2 movementVector = _moveAction.ReadValue<Vector2>();
-        CharacterController.Move(movementVector);
+        if (Keyboard.current.escapeKey.wasPressedThisFrame)
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        }
 
-        Vector2 lookVector = _lookAction.ReadValue<Vector2>();
-        CharacterController.Rotate(lookVector);
+        if (Mouse.current.leftButton.wasPressedThisFrame)
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        }
+
+        isSprinting = _sprintAction != null && _sprintAction.IsPressed();
+
+        if (_moveAction != null)
+        {
+            Vector2 movementVector = _moveAction.ReadValue<Vector2>();
+            playerController.Move(movementVector, isSprinting);
+        }
+
+        if (_lookAction != null)
+        {
+            Vector2 lookVector = _lookAction.ReadValue<Vector2>();
+            playerController.Rotate(lookVector);
+        }
     }
+
+    private void OnJumpPerformed(InputAction.CallbackContext context)
+    {
+        if (playerController != null)
+        {
+            playerController.Jump(isSprinting);
+        }
+    }   
 }
