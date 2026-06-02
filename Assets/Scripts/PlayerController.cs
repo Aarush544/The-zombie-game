@@ -19,10 +19,6 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         _characterController = GetComponent<CharacterController>();
-        if (_characterController == null)
-        {
-            Debug.LogError("PlayerController requires a CharacterController component.");
-        }
     }
 
     public void Move(Vector2 movementVector, bool isSprinting)
@@ -50,14 +46,10 @@ public class PlayerController : MonoBehaviour
 
     public void Jump(bool isSprinting){
         if (_characterController.isGrounded){
+            _verticalVelocity = JumpForce;
             if (isSprinting) {
-                _verticalVelocity = JumpForce + 10;
-            }
-            else {
-                _verticalVelocity = JumpForce;
+                _verticalVelocity += 10;
             }
         }
-
     }
-
 }
