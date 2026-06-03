@@ -14,6 +14,8 @@ public class PlayerController : MonoBehaviour
     private float _rotationY;
     private float _verticalVelocity;
 
+    public float health = 100f;
+
     public float SprintSpeed = 15f;
 
     void Start()
@@ -33,7 +35,6 @@ public class PlayerController : MonoBehaviour
 
     public void Rotate(Vector2 rotationVector)
     {
-        Debug.Log(rotationVector);
         _rotationX -= rotationVector.y * RotationSpeed * Time.deltaTime;
         _rotationY += rotationVector.x * RotationSpeed * Time.deltaTime;
         
@@ -49,6 +50,15 @@ public class PlayerController : MonoBehaviour
             _verticalVelocity = JumpForce;
             if (isSprinting) {
                 _verticalVelocity += 10;
+            }
+        }
+    }
+
+    void OnCollisionEnter(Collision collision){
+        if (collision.gameObject.CompareTag("Enemy")) {
+            health -= 20;
+            if (health <= 0) {
+                
             }
         }
     }
