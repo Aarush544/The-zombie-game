@@ -16,11 +16,7 @@ public class InputHandling : MonoBehaviour
         _lookAction = InputSystem.actions.FindAction("Look");
         _jumpAction = InputSystem.actions.FindAction("Jump");
         _sprintAction = InputSystem.actions.FindAction("Sprint");
-
-        
-        
         _jumpAction.performed += OnJumpPerformed;
-    
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
@@ -41,14 +37,8 @@ public class InputHandling : MonoBehaviour
         }
 
         isSprinting = _sprintAction != null && _sprintAction.IsPressed();
-
-        
-    
         Vector2 movementVector = _moveAction.ReadValue<Vector2>();
         playerController.Move(movementVector, isSprinting);
-        
-
-
         
         Vector2 lookVector = _lookAction.ReadValue<Vector2>();
         playerController.Rotate(lookVector);
@@ -59,18 +49,5 @@ public class InputHandling : MonoBehaviour
     {
         playerController.Jump(isSprinting);
         
-    }
-
-    private void OnDisable()
-    {
-        if (_jumpAction != null)
-        {
-            _jumpAction.performed -= OnJumpPerformed;
-        }
-
-        _moveAction?.Disable();
-        _lookAction?.Disable();
-        _jumpAction?.Disable();
-        _sprintAction?.Disable();
     }
 }

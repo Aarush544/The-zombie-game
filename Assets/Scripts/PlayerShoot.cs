@@ -26,10 +26,9 @@ public class PlayerShoot : MonoBehaviour
 
         if (Mouse.current.leftButton.wasPressedThisFrame && _shootTimer <= 0)
         {
-            Transform bulletHolder = GameObject.FindGameObjectWithTag("bullet holder").transform;
             Vector3 shotDirection = bulletSpawnTransform.forward;
             Quaternion spawnRotation = Quaternion.LookRotation(shotDirection) * Quaternion.Euler(bulletRotationOffset);
-            GameObject bullet = Instantiate(bulletPrefab, bulletSpawnTransform.position, spawnRotation, bulletHolder);
+            GameObject bullet = Instantiate(bulletPrefab, bulletSpawnTransform.position, spawnRotation);
 
             bullet.GetComponent<Rigidbody>().AddForce(shotDirection * bulletSpeed, ForceMode.Impulse);
 

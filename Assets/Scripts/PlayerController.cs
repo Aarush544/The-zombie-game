@@ -25,11 +25,10 @@ public class PlayerController : MonoBehaviour
 
     public void Move(Vector2 movementVector, bool isSprinting)
     {
-        Vector3 move = transform.forward * movementVector.y + transform.right * movementVector.x;
         float speed = isSprinting && SprintSpeed > 0f ? SprintSpeed : MovementSpeed;
-        move *= speed * Time.deltaTime;
+        Vector3 move = (transform.forward * movementVector.y + transform.right * movementVector.x) * speed * Time.deltaTime;
         _characterController.Move(move);
-        _verticalVelocity = _verticalVelocity + Gravity * Time.deltaTime;
+        _verticalVelocity += Gravity * Time.deltaTime;
         _characterController.Move(new Vector3(0, _verticalVelocity, 0) * Time.deltaTime);
     }
 
@@ -50,15 +49,6 @@ public class PlayerController : MonoBehaviour
             _verticalVelocity = JumpForce;
             if (isSprinting) {
                 _verticalVelocity += 10;
-            }
-        }
-    }
-
-    void OnCollisionEnter(Collision collision){
-        if (collision.gameObject.CompareTag("Enemy")) {
-            health -= 20;
-            if (health <= 0) {
-                
             }
         }
     }
